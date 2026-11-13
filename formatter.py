@@ -1,4 +1,5 @@
 import os
+import re
 from docx import Document
 from weasyprint import HTML, CSS
 
@@ -40,17 +41,33 @@ def build_kdp_pdf(docx_filename, output_pdf_filename):
 
     # --- PARSE MANUSCRIPT PARAGRAPHS ---
     current_chapter_open = False
+    chapter_regex = re.compile(r'^(Chapter\s+\d+)\s*(?:---|[-–—])\s*(.*)', re.IGNORECASE)
     
     for p in doc.paragraphs:
         text = p.text.strip()
         if not text:
             continue
             
-        # Detect Chapter Headings
-        if text.startswith("Chapter") or p.style.name.startswith("Heading 2"):
+        # Detect Chapter Headings & Split Number from Title
+        match = chapter_regex.match(text)
+        if match or p.style.name.startswith("Heading 2") and text.startswith("Chapter"):
             if current_chapter_open:
                 html_content += "</div>\n"
-            html_content += f'<div class="chapter">\n<h2 class="chapter-heading">{text}</h2>\n'
+            
+            if match:
+                ch_num = match.group(1)
+                ch_title = match.group(2).strip('"“”')
+            else:
+                ch_num = text
+                ch_title = ""
+
+            html_content += f'<div class="chapter">\n'
+            html_content += f'<div class="chapter-header-container">\n'
+            html_content += f'  <div class="chapter-number">{ch_num}</div>\n'
+            html_content += f'  <hr class="chapter-rule">\n'
+            if ch_title:
+                html_content += f'  <div class="chapter-title">{ch_title}</div>\n'
+            html_content += f'</div>\n'
             current_chapter_open = True
         else:
             if not current_chapter_open:
@@ -63,21 +80,12 @@ def build_kdp_pdf(docx_filename, output_pdf_filename):
 
     html_content += "</body></html>"
 
-    # Save temporary HTML for debugging if needed
-    with open("temp_book.html", "w", encoding="utf-8") as f:
-        f.write(html_content)
-
     print("Compiling print-ready PDF with WeasyPrint...")
-    # Render PDF using external CSS stylesheet
     HTML(string=html_content, base_url=".").write_pdf(
         output_pdf_filename,
         stylesheets=[CSS('styles.css')]
     )
     
-    # Cleanup temp file
-    if os.path.exists("temp_book.html"):
-        os.remove("temp_book.html")
-        
     print(f"Success! Print-ready KDP PDF generated: {output_pdf_filename}")
 
 if __name__ == "__main__":

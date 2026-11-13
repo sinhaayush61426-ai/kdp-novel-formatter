@@ -21,19 +21,18 @@
     }
 }
 
-/* Even pages (Left side / Verso) - wider gutter on the right edge */
+/* Even pages (Left side / Verso) */
 @page :left {
     margin-left: 0.65in;
     margin-right: 0.85in;
 }
 
-/* Odd pages (Right side / Recto) - wider gutter on the left edge (binding side) */
+/* Odd pages (Right side / Recto) */
 @page :right {
     margin-left: 0.85in;
     margin-right: 0.65in;
 }
 
-/* Suppress headers/footers on front matter pages */
 @page frontmatter {
     @top-center {
         content: none;
@@ -87,22 +86,42 @@ body {
     font-style: italic;
 }
 
-/* --- CHAPTERS --- */
+/* --- CHAPTER LAYOUT (Matching Reference Image) --- */
 .chapter {
     page-break-before: always;
 }
 
-h2.chapter-heading {
-    font-family: 'League Spartan', sans-serif;
-    font-size: 18pt;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 1in;
+.chapter-header-container {
+    margin-top: 0.8in;
+    /* Controlled top spacing to avoid excessive blank space */
     margin-bottom: 24pt;
-    break-after: avoid;
 }
 
-/* --- PARAGRAPHS & TYPOGRAPHY --- */
+.chapter-number {
+    font-family: 'Garamond', serif;
+    font-size: 13pt;
+    font-weight: normal;
+    color: #333333;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.chapter-rule {
+    border: none;
+    border-top: 1px solid #111111;
+    width: 100%;
+    margin: 8px 0 16px 0;
+}
+
+.chapter-title {
+    font-family: 'Garamond', serif;
+    font-size: 22pt;
+    font-weight: bold;
+    color: #000000;
+    line-height: 1.2;
+}
+
+/* --- PARAGRAPHS & DROP CAP --- */
 p {
     margin: 0;
     text-indent: 0.2in;
@@ -110,7 +129,17 @@ p {
     widows: 2;
 }
 
-/* First paragraph following a chapter heading has no indentation */
-h2.chapter-heading+p {
+/* First paragraph after chapter title has no indentation and features a drop cap */
+.chapter-header-container+p {
     text-indent: 0;
+}
+
+.chapter-header-container+p::first-letter {
+    font-size: 3.4em;
+    float: left;
+    line-height: 0.8;
+    padding-top: 4px;
+    padding-right: 6px;
+    padding-bottom: 0;
+    font-family: 'Garamond', serif;
 }
