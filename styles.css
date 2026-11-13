@@ -1,0 +1,116 @@
+/* =================================================_
+   KDP PAPERBACK PRINT STYLESHEET (5.5 x 8.5 in)
+   ================================================= */
+
+@page {
+    size: 5.5in 8.5in;
+    margin-top: 0.75in;
+    margin-bottom: 0.75in;
+
+    @bottom-center {
+        content: counter(page);
+        font-family: 'Garamond', serif;
+        font-size: 10pt;
+    }
+
+    @top-center {
+        content: "THE LAST SIGNAL";
+        font-family: 'Garamond', serif;
+        font-size: 9pt;
+        color: #555555;
+    }
+}
+
+/* Even pages (Left side / Verso) - wider gutter on the right edge */
+@page :left {
+    margin-left: 0.65in;
+    margin-right: 0.85in;
+}
+
+/* Odd pages (Right side / Recto) - wider gutter on the left edge (binding side) */
+@page :right {
+    margin-left: 0.85in;
+    margin-right: 0.65in;
+}
+
+/* Suppress headers/footers on front matter pages */
+@page frontmatter {
+    @top-center {
+        content: none;
+    }
+}
+
+body {
+    font-family: 'Garamond', serif;
+    font-size: 11pt;
+    line-height: 1.15;
+    color: #000000;
+    text-align: justify;
+}
+
+/* --- FRONT MATTER --- */
+.front-page {
+    page: frontmatter;
+    page-break-after: always;
+    text-align: center;
+    padding-top: 2in;
+}
+
+.book-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 26pt;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.book-subtitle {
+    font-size: 12pt;
+    margin-bottom: 3in;
+}
+
+.author-name {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.copyright-page,
+.dedication-page {
+    page: frontmatter;
+    page-break-after: always;
+    padding-top: 2.5in;
+    font-size: 9.5pt;
+}
+
+.dedication-page {
+    text-align: center;
+    font-style: italic;
+}
+
+/* --- CHAPTERS --- */
+.chapter {
+    page-break-before: always;
+}
+
+h2.chapter-heading {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 18pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 1in;
+    margin-bottom: 24pt;
+    break-after: avoid;
+}
+
+/* --- PARAGRAPHS & TYPOGRAPHY --- */
+p {
+    margin: 0;
+    text-indent: 0.2in;
+    orphans: 2;
+    widows: 2;
+}
+
+/* First paragraph following a chapter heading has no indentation */
+h2.chapter-heading+p {
+    text-indent: 0;
+}
